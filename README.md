@@ -1,2 +1,2 @@
 # jehovah3d
-3d engine based on stage3d of adobe flash player.
+jehovah3d Flash GPU accelerated 3D engine
