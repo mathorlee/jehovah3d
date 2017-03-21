@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="200" 
+			   title="多个场景文件，请选择一种一个" >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			[Bindable]
+			public var listData:ArrayCollection = new ArrayCollection();
+		]]>
+	</fx:Script>
+	
+	<s:List id="fuwo3dList" width="100%" height="125" itemRenderer="editor.view.renderer.MultiSceneRenderer" dataProvider="{listData}" />
+	<s:Group y="130">
+		<s:Button id="cancleButton" label="取消" buttonMode="true" />
+		<s:Button id="loadButton" label="加载" buttonMode="true" x="300" />
+	</s:Group>
+	
+</s:TitleWindow>

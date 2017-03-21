@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" minWidth="760" minHeight="540"
+			   backgroundAlpha="0" 
+			   frameRate="30" 
+			   creationComplete="onCreationComplete()"
+			   addedToStage="onAdded()" xmlns:view="editor.view.*" xmlns:commandpanel="editor.view.commandpanel.*">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import org.puremvc.as3.patterns.facade.Facade;
+			
+			private function onCreationComplete():void
+			{
+//				trace("onCreationComplete");
+				ApplicationFacade.getInstance().sendNotification(ApplicationFacade.START, this, null);
+			}
+			private function onAdded():void
+			{
+//				trace("onAdded");
+				stage.scaleMode = StageScaleMode.NO_SCALE;
+				stage.align = StageAlign.TOP_LEFT;
+				stage.addEventListener(Event.RESIZE, onResize);
+				onResize();
+			}
+			private function onResize(evt:Event = null):void
+			{
+				Facade.getInstance().sendNotification(ApplicationFacade.STAGE_RESIZE, {"width": stage.stageWidth, "height": stage.stageHeight}, null);
+			}
+		]]>
+	</fx:Script>
+	
+	<view:Scene3D id="scene3D" />
+	<view:Load id="load" top="10" left="10" />
+	<view:LoadingBar id="loadingBar" horizontalCenter="0" verticalCenter="0" visible="false" />
+	<view:MultiScene id="multiScene" horizontalCenter="0" verticalCenter="0" visible="false" />
+	<view:MissingTexture id="missingTexture" horizontalCenter="0" verticalCenter="0" visible="false" />
+	<view:AnimationEdit id="animationEdit" horizontalCenter="0" verticalCenter="0" visible="false" />
+	<commandpanel:CommandPanel id="commandPanel" right="0" top="0" />
+</s:Application>

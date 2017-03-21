@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="600" height="320">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			
+			import spark.utils.DataItem;
+			
+			private var _data:Object;
+			
+			public function get data():Object
+			{
+				return _data;
+			}
+			
+			public function set data(data:Object):void
+			{
+				_data = data;
+				var key:*;
+				var dataProvider:ArrayCollection = new ArrayCollection();
+				for(key in data)
+				{
+					var di:DataItem = new DataItem();
+					di.name = key;
+					if(data[key].frameCount > 0 && data[key].matrices)
+						di.animational = "是";
+					else
+						di.animational = "否";
+					di.doppelganger = "";
+					di.instruction = "";
+					dataProvider.addItem(di);
+				}
+				dataGrid.dataProvider = dataProvider;
+			}
+			
+			public function updateData():void
+			{
+				var i:int;
+				var di:Object;
+				for(i = 0; i < dataGrid.dataProvider.length; i ++)
+				{
+					di = dataGrid.dataProvider.getItemAt(i);
+					if(_data[di.name])
+					{
+						if(di.doppelganger && di.doppelganger != "")
+							_data[di.name].doppelganger = di.doppelganger;
+						if(di.instruction && di.instruction != "")
+							_data[di.name].instruction = di.instruction;
+					}
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:TitleWindow id="g0" title="场景" width="100%" height="100%" horizontalCenter="0" verticalCenter="0">
+		<!--<s:controlBarContent>
+			<s:HGroup verticalAlign="baseline">
+				<s:CheckBox label="variableRowHeight={dataGrid.variableRowHeight}" selected="@{dataGrid.variableRowHeight}"/>
+				<s:Label text="      "/>
+				<s:HSlider minimum="12" maximum="120" value="@{dataGrid.grid.rowHeight}"/>
+				<s:Label text="rowHeight={dataGrid.grid.rowHeight}"/>
+			</s:HGroup>
+		</s:controlBarContent>-->
+		
+		<s:DataGrid id="dataGrid" left="5" right="5" top="5" bottom="35" editable="true">
+			
+			<s:columns>
+				<s:ArrayList>
+					<s:GridColumn dataField="name" headerText="物体" width="100" showDataTips="true"/>
+					<s:GridColumn dataField="animational" headerText="是否有动画" editable="false" width="100" />
+					<s:GridColumn dataField="doppelganger" headerText="替身(简模，用于鼠标拾取)" width="100" showDataTips="true"/>
+					<s:GridColumn dataField="instruction" headerText="说明文字" showDataTips="true" />
+				</s:ArrayList>
+			</s:columns>
+			
+		</s:DataGrid>
+		
+		<s:Button id="exportBTN" label="导出动画" buttonMode="true" left="5" bottom="5" />
+		
+	</s:TitleWindow>
+	
+</s:Group>

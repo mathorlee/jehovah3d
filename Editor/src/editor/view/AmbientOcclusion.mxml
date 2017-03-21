@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			public function get paramTIs():Vector.<TextInput>
+			{
+				return Vector.<TextInput>([scaleTI, biasTI, sampleRadiusTI, intensityTI]);
+			}
+		]]>
+	</fx:Script>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#D4D4D4" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:VGroup>
+		<s:CheckBox id="useAOCB" label="开启AO" />
+		
+		<s:VGroup id="param" gap="2">
+			<s:Label text="scale(遮挡线性衰减系数)" />
+			<s:TextInput id="scaleTI" width="100" />
+			
+			<s:Label text="bias(控制遮挡圆锥张开幅度)" />
+			<s:TextInput id="biasTI" width="100" />
+			
+			<s:Label text="sampleRadius(采样半径)" />
+			<s:TextInput id="sampleRadiusTI" width="100" />
+			
+			<s:Label text="intensity(AO强度)" />
+			<s:TextInput id="intensityTI" width="100" />
+		</s:VGroup>
+	</s:VGroup>
+	
+</s:Group>

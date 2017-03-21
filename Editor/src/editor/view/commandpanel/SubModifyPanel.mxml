@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import editor.view.commandpanel.modify.FreeLightModifier;
+			import editor.view.commandpanel.modify.Modifier;
+			
+			import jehovah3d.core.Object3D;
+			import jehovah3d.core.light.FreeLight3D;
+			
+			private var _object:Object3D;
+			private var _modifier:Modifier;
+			
+			public function set object(value:Object3D):void
+			{
+				if(_object != value)
+				{
+					_object = value;
+					if(_object)
+					{
+						if(_modifier)
+							removeModifer();
+						if(_object is FreeLight3D)
+							addModifer(FreeLightModifier);
+					}
+					else
+					{
+						if(_modifier)
+							removeModifer();
+					}
+				}
+			}
+			
+			private function addModifer(viewClass:Class):void
+			{
+				_modifier = new viewClass();
+				_modifier.object = _object;
+				addElement(_modifier);
+			}
+			private function removeModifer():void
+			{
+				_modifier.dispose();
+				removeElement(_modifier);
+				_modifier = null;
+			}
+		]]>
+	</fx:Script>
+	
+</s:Group>

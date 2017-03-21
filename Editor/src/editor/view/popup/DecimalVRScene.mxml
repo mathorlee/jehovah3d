@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="300">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<s:TitleWindow id="g0" title="场景" width="100%" height="100%" horizontalCenter="0" verticalCenter="0">
+		<s:VGroup>
+			<s:TextArea id="decimalTA" width="400" height="220"/>
+			
+			<s:Button id="saveBTN" label="保存到本地" buttonMode="true" />
+		</s:VGroup>
+		
+	</s:TitleWindow>
+	
+</s:Group>

@@ -1,0 +1,6 @@
+VSWIZARD 7.0
+Wizard=VsWizard.VsWizardEngine.9.0
+
+Param="WIZARD_NAME = 3dsmaxPluginWizard"
+Param="ABSOLUTE_PATH = E:\3ds Max 2010 SDK\maxsdk\howto\3dsmaxPluginWizard"
+Param="FALLBACK_LCID = 1033"

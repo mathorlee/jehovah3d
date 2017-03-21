@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="200">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			[Bindable]
+			public var listData:ArrayCollection = new ArrayCollection();
+		]]>
+	</fx:Script>
+	
+	<s:Rect width="100%" height="100%">
+		<s:fill>
+			<s:SolidColor color="#D4D4D4" />
+		</s:fill>
+	</s:Rect>
+	
+	<s:TitleWindow id="g0" width="100%" height="100%" title="缺少贴图">
+		<s:List id="textureList" width="100%" height="125" itemRenderer="editor.view.renderer.MissingTextureRenderer" dataProvider="{listData}" mouseEnabled="false" mouseChildren="false" />
+		<s:Button id="pickButton" label="添加丢失贴图" buttonMode="true" y="130" />
+		<s:Button id="ignoreButton" label="忽略" buttonMode="true" x="300" y="130" />
+	</s:TitleWindow>
+	
+	<s:Group id="g1" width="100%" height="100%">
+		<s:Button id="unfoldButton" label="继续添加丢失贴图" buttonMode="true" horizontalCenter="0" verticalCenter="0" width="100%" height="100%" />
+	</s:Group>
+	
+</s:Group>

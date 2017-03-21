@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modify:Modifier xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				 xmlns:s="library://ns.adobe.com/flex/spark" 
+				 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:modify="editor.view.commandpanel.modify.*"
+				 width="300" height="100%" 
+				 creationComplete="onCreationComplete()"
+				 >
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.ColorPickerEvent;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import editor.view.mediator.Scene3DMediator;
+			
+			import jehovah3d.core.Object3D;
+			import jehovah3d.core.light.FreeLight3D;
+			import jehovah3d.util.HexColor;
+			
+			import org.puremvc.as3.patterns.facade.Facade;
+			
+			
+			
+			
+			private function onCreationComplete():void
+			{
+				topAO.addEventListener(TopAngleOperator.TOP_ANGLE_CHANGE, onTopAngleChange);
+				frontAO.addEventListener(FrontAngleOperator.FRONT_ANGLE_CHANGE, onFrontAngleChange);
+				shadowmapCB.textInput.editable = false;
+				shadowmapCB.textInput.selectable = false;
+				lightTypeCB.textInput.editable = false;
+				lightTypeCB.textInput.selectable = false;
+				lightConeCB.textInput.editable = false;
+				lightConeCB.textInput.selectable = false;
+			}
+			private function onTopAngleChange(evt:Event):void
+			{
+				freeLight.rotationZ = topAO.topAngle;
+				freeLight.updateLightBody();
+			}
+			private function onFrontAngleChange(evt:Event):void
+			{
+				freeLight.rotationX = frontAO.frontAngle;
+				freeLight.updateLightBody();
+			}
+			
+			override public function set object(value:Object3D):void
+			{
+				_object = value;
+				depthCompareToleranceIT.text = String(freeLight.depthCompareTolerance);
+				zNearTI.text = String(freeLight.zNear);
+				zFarTI.text = String(freeLight.zFar);
+				
+				topAO.topAngle = freeLight.rotationZ;
+				frontAO.frontAngle = freeLight.rotationX;
+				shadowCB.selected = freeLight.useShadow;
+				
+				if(freeLight.lightType == FreeLight3D.TYPE_DIRECTIONAL_LIGHT)
+					lightTypeCB.selectedIndex = 0;
+				else
+					lightTypeCB.selectedIndex = 1;
+				if(freeLight.lightCone == FreeLight3D.CONE_CIRCLE)
+					lightConeCB.selectedIndex = 0;
+				else
+					lightConeCB.selectedIndex = 1;
+				
+				viewWidthTI.text = String(freeLight.viewWidth);
+				viewHeightTI.text = String(freeLight.viewHeight);
+				updateSubComponent();
+			}
+			
+			private function onFocusOut(evt:FocusEvent):void
+			{
+				onChange(evt.currentTarget);
+			}
+			private function onEnter(evt:FlexEvent):void
+			{
+				Scene3DMediator(Facade.getInstance().retrieveMediator(Scene3DMediator.NAME)).view.setFocus();
+			}
+			private function onChange(target:Object):void
+			{
+				switch(target)
+				{
+					case depthCompareToleranceIT:
+						freeLight.depthCompareTolerance = Number(depthCompareToleranceIT.text);
+						break;
+					
+					case zNearTI:
+						freeLight.zNear = Number(zNearTI.text);
+						freeLight.updateLightBody();
+						break;
+					
+					case zFarTI:
+						freeLight.zFar = Number(zFarTI.text);
+						freeLight.updateLightBody();
+						break;
+					
+					case viewWidthTI:
+						freeLight.viewWidth = Number(viewWidthTI.text);
+						freeLight.updateLightBody();
+						break;
+					
+					case viewHeightTI:
+						freeLight.viewHeight = Number(viewHeightTI.text);
+						freeLight.updateLightBody();
+						break;
+					
+					case viewRadiusTI:
+						freeLight.viewRadius = Number(viewRadiusTI.text);
+						freeLight.updateLightBody();
+						break;
+					
+					case fovTI:
+						freeLight.fov = Number(fovTI.text);
+						freeLight.updateLightBody();
+						break;
+					
+					default:
+						break;
+				}
+			}
+			
+			public function get freeLight():FreeLight3D
+			{
+				return _object as FreeLight3D;
+			}
+			
+			override public function dispose():void
+			{
+				super.dispose();
+				topAO.removeEventListener(TopAngleOperator.TOP_ANGLE_CHANGE, onTopAngleChange);
+				topAO = null;
+				frontAO.removeEventListener(FrontAngleOperator.FRONT_ANGLE_CHANGE, onFrontAngleChange);
+				frontAO = null;
+			}
+			
+			private function updateSubComponent():void
+			{
+				if(freeLight.lightCone == FreeLight3D.CONE_RECTANGLE)
+				{
+					if(freeLight.lightType == FreeLight3D.TYPE_SPOT_LIGHT)
+					{
+						directional_circle.visible = false;
+						directional_rect.visible = false;
+						spot_circle.visible = false;
+						spot_rect.visible = true;
+						
+						hFovTI.text = String(freeLight.hFov);
+						vFovTI.text = String(freeLight.vFov);
+					}
+					else if(freeLight.lightType == FreeLight3D.TYPE_DIRECTIONAL_LIGHT)
+					{
+						directional_circle.visible = false;
+						directional_rect.visible = true;
+						spot_circle.visible = false;
+						spot_rect.visible = false;
+						
+						viewWidthTI.text = String(freeLight.viewWidth);
+						viewHeightTI.text = String(freeLight.viewHeight);
+					}
+				}
+				else if(freeLight.lightCone == FreeLight3D.CONE_CIRCLE)
+				{
+					if(freeLight.lightType == FreeLight3D.TYPE_SPOT_LIGHT)
+					{
+						directional_circle.visible = false;
+						directional_rect.visible = false;
+						spot_circle.visible = true;
+						spot_rect.visible = false;
+						
+						fovTI.text = String(freeLight.fov);
+					}
+					else if(freeLight.lightType == FreeLight3D.TYPE_DIRECTIONAL_LIGHT)
+					{
+						directional_circle.visible = true;
+						directional_rect.visible = false;
+						spot_circle.visible = false;
+						spot_rect.visible = false;
+						
+						viewRadiusTI.text = String(freeLight.viewRadius);
+					}
+				}
+			}
+			private function onLightConeChange(evt:IndexChangeEvent):void
+			{
+				freeLight.lightCone = evt.target.selectedItem.value;
+				updateSubComponent();
+			}
+			
+			private function onLightTypeChange(evt:IndexChangeEvent):void
+			{
+				freeLight.lightType = evt.target.selectedItem.value;
+				updateSubComponent();
+			}
+			private function onShadowMapSizeChange(evt:IndexChangeEvent):void
+			{
+				freeLight.shadowmappingsize = evt.target.selectedItem.size;
+			}
+			
+			protected function onShadowCBChange(evt:Event):void
+			{
+				freeLight.useShadow = shadowCB.selected;
+			}
+			
+			protected function onLightColorCPChange(event:ColorPickerEvent):void
+			{
+				freeLight.color = new HexColor(lightColorCP.selectedColor, 1);
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:VGroup>
+		<s:CheckBox id="shadowCB" label="阴影" change="onShadowCBChange(event)" />
+		<s:HGroup>
+			<s:Label text="颜色" />
+			<mx:ColorPicker id="lightColorCP" showTextField="true" selectedColor="0xFFFFFF" change="onLightColorCPChange(event)" />
+		</s:HGroup>
+		
+		<s:HGroup>
+			<s:Label text="depthCompareTolerance" />
+			<s:TextInput id="depthCompareToleranceIT" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+		</s:HGroup>
+		
+		<s:HGroup width="100%" height="100%" >
+			<s:Label text="zNear:" width="100" />
+			<s:TextInput id="zNearTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+		</s:HGroup>
+		
+		<s:HGroup width="100%" height="100%" >
+			<s:Label text="zFar:" width="100" />
+			<s:TextInput id="zFarTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+		</s:HGroup>
+		
+		<s:HGroup>
+			<s:Label text="shadow map size:" width="100" />
+			<s:ComboBox labelField="label" selectedIndex="4" width="100" id="shadowmapCB" change="onShadowMapSizeChange(event)" >
+				<s:ArrayCollection source="{[
+								   {'label': '64*64', 'size': 64},
+								   {'label': '128*128', 'size': 128},
+								   {'label': '256*256', 'size': 256}, 
+								   {'label': '512*512', 'size': 512}, 
+								   {'label': '1024*1024', 'size': 1024}, 
+								   {'label': '2048*2048', 'size': 2048}
+								   ]}" />
+			</s:ComboBox>
+		</s:HGroup>
+		
+		<s:HGroup>
+			<s:Label text="Light Type" width="100" />
+			<s:ComboBox labelField="label" width="100" id="lightTypeCB" change="onLightTypeChange(event)" >
+				<s:ArrayCollection source="{[
+								   {'label': 'Directional', 'value': 'TypeDirectionalLight'},
+								   {'label': 'Spot', 'value': 'TypeSportLight'}
+								   ]}" />
+			</s:ComboBox>
+		</s:HGroup>
+		
+		<s:HGroup>
+			<s:Label text="Light Cone" width="100" />
+			<s:ComboBox labelField="label" width="100" id="lightConeCB" change="onLightConeChange(event)" >
+				<s:ArrayCollection source="{[
+								   {'label': 'Circle', 'value': 'ConeCircle'},
+								   {'label': 'Rectangle', 'value': 'ConeRectangle'}
+								   ]}" />
+			</s:ComboBox>
+		</s:HGroup>
+		
+		<s:Group height="90">
+			<modify:TopAngleOperator id="topAO" radius="40" x="40" top="40" />
+			<modify:FrontAngleOperator id="frontAO" radius="40" x="40" top="40" left="130"/>
+		</s:Group>
+		
+		<s:Group>
+			
+			<s:VGroup id="directional_rect">
+				<s:HGroup width="100%" height="100%" >
+					<s:Label text="viewWidth:" width="100" />
+					<s:TextInput id="viewWidthTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+				</s:HGroup>
+				
+				<s:HGroup>
+					<s:Label text="viewHeight:" width="100" />
+					<s:TextInput id="viewHeightTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+				</s:HGroup>
+			</s:VGroup>
+			
+			<s:HGroup id="directional_circle">
+				<s:Label text="viewRadius:" width="100" />
+				<s:TextInput id="viewRadiusTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+			</s:HGroup>
+			
+			<s:VGroup id="spot_rect">
+				<s:HGroup width="100%" height="100%" >
+					<s:Label text="hFov:" width="100" />
+					<s:TextInput id="hFovTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+				</s:HGroup>
+				
+				<s:HGroup>
+					<s:Label text="vFov:" width="100" />
+					<s:TextInput id="vFovTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+				</s:HGroup>
+			</s:VGroup>
+			
+			<s:HGroup id="spot_circle">
+				<s:Label text="fov:" width="100" />
+				<s:TextInput id="fovTI" focusOut="onFocusOut(event)" enter="onEnter(event)" />
+			</s:HGroup>
+			
+		</s:Group>
+		
+	</s:VGroup>
+	
+</modify:Modifier>

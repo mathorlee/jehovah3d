@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:view="editor.view.*">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<s:VGroup>
+		<s:Button id="loadButton" label="加载模型" buttonMode="true" height="30" />
+		<s:Button id="exportSettingBTN" label="导出设置" buttonMode="true" height="30" /> 
+		<s:Button id="loadAnimation" label="加载动画" buttonMode="true" height="30" />
+		<s:Button id="hexVRToDecimalVR" label="HexVRToDecimalVR" buttonMode="true" height="30" />
+		<!--<s:Button id="lzmaCompressBTN" label="LZMA压缩" buttonMode="true" height="30" />
+		<s:Button id="lzmaUncompressBTN" label="LZMA解压缩" buttonMode="true" height="30" />-->
+		
+		<s:Group>
+			<s:Rect width="100%" height="100%">
+				<s:fill>
+					<s:SolidColor color="#D4D4D4" />
+				</s:fill>
+			</s:Rect>
+			<s:VGroup gap="2">
+				<s:CheckBox id="useDefaultLightCB" label="默认光照" buttonMode="true" selected="true" />
+				<s:Label text="环境光系数" />
+				<s:TextInput id="ambientTI" width="100" />
+				<s:Label text="漫反射系数" />
+				<s:TextInput id="diffuseTI" width="100" />
+				<s:Label text="相机zNear" />
+				<s:TextInput id="zNearTI" width="100" />
+				<s:Label text="相机zFar" />
+				<s:TextInput id="zFarTI" width="100" />
+			</s:VGroup>
+		</s:Group>
+		
+		<view:Background id="bg" />
+		
+		<view:AmbientOcclusion id="ao" visible="false" />
+		
+	</s:VGroup>
+	
+</s:Group>

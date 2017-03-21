@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 creationComplete="onCreationComplete()">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.core.UIComponent;
+			
+			import utils.loadingbar.LoadingBar;
+			private var uic:UIComponent;
+			public var loadingBar:utils.loadingbar.LoadingBar;
+			
+			private function onCreationComplete():void
+			{
+				uic = new UIComponent();
+				addElement(uic);
+				loadingBar = new utils.loadingbar.LoadingBar();
+				uic.addChild(loadingBar);
+			}
+		]]>
+	</fx:Script>
+	
+</s:Group>
